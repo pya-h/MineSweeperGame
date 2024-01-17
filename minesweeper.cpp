@@ -46,19 +46,30 @@ void MineSweeperGame::moveTo(short y, short x) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void MineSweeperGame::moveTo(short y, short x) {
+void MineSweeperGame::moveTo(CursorPosition &position) {
 	// transfer the text cursor of the console to a target destination
 	// used for directional player move
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
+	COORD coord;
+    coord.X = position.x;
+    coord.Y = position.y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
 void MineSweeperGame::dispositionCursor(short yDirection, short xDirection) {
 	// directions
 	this->cursor.disposition(yDirection, xDirection);
-	
+	// prevent cursor from jumping out of table
+	if(this->cursor.y > this->southY)
+		this->cursor.setY(this->northY);
+	else if(this->cursor.y < this->northY)
+		this->cursor.setY(this->southY);
+		
+	if(this->cursor.x > this->eastX)
+		this->cursor.setX(this->westX);
+	else if(this->cursor.x < this->westX)
+		this->cursor.setX(this->eastX);
+		
+	this->moveTo(this->cursor);
 }
 
 void MineSweeperGame::draw() {
@@ -89,5 +100,9 @@ void MineSweeperGame::draw() {
 		}
 
 	}
-
+	
+	// move to first cell
+	this->cursor.update(this->northY, this->westX);
+	this->moveTo(this->cursor);
 }
+
