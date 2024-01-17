@@ -1,10 +1,21 @@
 #include "minesweeper.h"
+#include <windows.h>
+#include <stdlib.h>
+#include <iostream>
 
 using namespace std;
+
+void MineSweeperGame::pause() {
+	std::cout << std::endl;
+	system("pause");	
+}
+
 void MineSweeperGame::resizeConsole() {
+	// use windows.h library to resize the console into the desired width and heights
 	COORD coord;
 	const int width = this->columns * HORIZONTAL_SCALE, height = this->rows * VERTICAL_SCALE;
-    coord.X = width;
+    // set the position and the coordinates of the console on the windows
+	coord.X = width;
     coord.Y = height;
     SMALL_RECT rect;
     rect.Left = 0;
@@ -16,40 +27,67 @@ void MineSweeperGame::resizeConsole() {
 }
 
 MineSweeperGame::~MineSweeperGame() {
+	// Class destructor
 	// TODO: call gameOver method
 	//cout << "Game Over";
 }
 
 string MineSweeperGame::getDimensions() {
+	// just used to inform about the dimensions used in the object.
 	return to_string(this->rows) + " x " + to_string(this->columns);
 }
 
-void MineSweeperGame::moveTo(short int x, short int y) {
+void MineSweeperGame::moveTo(short y, short x) {
+	// transfer the text cursor of the console to a target destination
+	// used for directional player move
     COORD coord;
     coord.X = x;
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+void MineSweeperGame::moveTo(short y, short x) {
+	// transfer the text cursor of the console to a target destination
+	// used for directional player move
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+void MineSweeperGame::dispositionCursor(short yDirection, short xDirection) {
+	// directions
+	this->cursor.disposition(yDirection, xDirection);
+	
+}
+
 void MineSweeperGame::draw() {
-	int i,j;
-   /*for(i = 0;i < mty;i++)
-   	for(j = 0;j > mtx;j++)
-      	t[ty][tx] = NULL;*/
-	cout << endl << endl << endl << endl;
-	for(i = 0; i <= this->rows;i++)
+	// set console background to white(=7) and text color to brown(=4)
+	system("color 74");
+	// draw the empty table
+	// the table is designed by a specific order of | and -- prints
+	for(int i = 0; i <= VERTICAL_SCALE; i++)
+		cout << endl;
+		
+	string leftMargin = "";
+	// create a tab string for creating a space between left side of the table and the left side of console
+	for(int i = 0; i < HORIZONTAL_SCALE/2; i++, leftMargin += "\t"); 
+	
+	for(int i = 0; i <= this->rows;i++)
 	{
-		cout << "\t\t";
-		for(j = 0;j < this->columns;j++)
+		cout << leftMargin;
+		for(int j = 0;j < this->columns;j++)
 			cout << " --";
-		//cout << ".";
-		cout << endl;
-		cout << "\t\t";
-		for(j = 0;j <= this->columns;j++)
-			cout << "|  ";
-		cout << endl;
+
+		cout << endl << leftMargin;
+		
+		if(i < this->rows) {
+			for(int j = 0;j <= this->columns;j++)
+				cout << "|  ";
+				
+			cout << endl;
+		}
+
 	}
-	cout << "\t\t";
-	for(j = 0;j < this->columns;j++)
-		cout << " --";
+
 }
