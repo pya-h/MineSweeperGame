@@ -8,7 +8,7 @@ using namespace std;
 
 
 int main() {
-	MineSweeperGame game(16, 30);
+	MineSweeperGame game(12, 30);
 	// resize the console so it can contain the table of the sepcified dimensions
 	game.resizeConsole();
 	//cout << table.getDimensions();

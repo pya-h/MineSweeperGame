@@ -90,6 +90,6 @@ public:
 	void draw();
 	
 	void pause();
-	void dispositionCursor(uint8_tDirection, uint8_t xDirection);
-};
+	void dispositionCursor(uint8_t Direction, uint8_t xDirection);
+}
 #endif // MINESWEEPER_H
