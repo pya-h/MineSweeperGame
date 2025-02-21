@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;2;0;0;0
-UnitCount=4
+UnitCount=5
 
 [VersionInfo]
 Major=1
@@ -81,7 +81,17 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=extra.h
+FileName=entities.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit5]
+FileName=utils.h
 CompileCpp=1
 Folder=
 Compile=1

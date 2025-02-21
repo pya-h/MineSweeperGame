@@ -17,6 +17,8 @@ int main() {
 	//game.pause();
 	bool isGameOver = false;
 	// game starts here:
+
+	// TODO: Checkout memory alloc/deallocations
 	while(!isGameOver) {
 		const char movement = _getch();
 		switch(movement) {

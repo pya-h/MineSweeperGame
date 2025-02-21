@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <iostream>
+#include "utils.h"
 
 using namespace std;
 
@@ -11,6 +12,8 @@ void MineSweeperGame::pause() {
 }
 
 void MineSweeperGame::resizeConsole() {
+	// FIXME: Seems not working on windows 11
+
 	// use windows.h library to resize the console into the desired width and heights
 	COORD coord;
 	const int width = this->columns * HORIZONTAL_SCALE, height = this->rows * VERTICAL_SCALE;
@@ -40,19 +43,22 @@ string MineSweeperGame::getDimensions() {
 void MineSweeperGame::moveTo(uint8_t y, uint8_t x) {
 	// transfer the text cursor of the console to a target destination
 	// used for directional player move
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+	gotoxy(x, y);
+	this->cursor->update(y, x, this->northY, this->westX);
+}
+
+void MineSweeperGame::moveTo(uint8_t y, uint8_t x, uint8_t row, uint8_t column) {
+	// transfer the text cursor of the console to a target destination
+	// used for directional player move
+	gotoxy(x, y);
+	this->cursor->setV(y, row);
+	this->cursor->setH(x, column);
 }
 
 void MineSweeperGame::moveTo(CursorPosition *position) {
 	// transfer the text cursor of the console to a target destination
 	// used for directional player move
-	COORD coord;
-    coord.X = position->x;
-    coord.Y = position->y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+	gotoxy(position->x, position->y);
 }
 
 void MineSweeperGame::dispositionCursor(int8_t yDirection, int8_t xDirection) {
@@ -60,14 +66,14 @@ void MineSweeperGame::dispositionCursor(int8_t yDirection, int8_t xDirection) {
 	this->cursor->disposition(yDirection, xDirection);
 	// prevent cursor from jumping out of table
 	if(this->cursor->y > this->southY)
-		this->cursor->setY(this->northY);
+		this->cursor->setV(this->northY, 0);
 	else if(this->cursor->y < this->northY)
-		this->cursor->setY(this->southY);
+		this->cursor->setV(this->southY, this->rows - 1);
 		
 	if(this->cursor->x > this->eastX)
-		this->cursor->setX(this->westX);
+		this->cursor->setH(this->westX, 0);
 	else if(this->cursor->x < this->westX)
-		this->cursor->setX(this->eastX);
+		this->cursor->setH(this->eastX, this->columns - 1);
 		
 	this->moveTo(this->cursor);
 }
