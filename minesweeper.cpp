@@ -108,7 +108,7 @@ void MineSweeperGame::draw() {
 	}
 	
 	// move to first cell
-	this->cursor->update(this->northY, this->westX);
+	this->cursor->update(this->northY, this->westX, this->northY, this->westX);
 	this->moveTo(this->cursor);
 }
 

@@ -41,6 +41,9 @@ int main() {
 				// move down
 				game.dispositionCursor(+1, 0);
 				break;
+			case '\r':
+				// TODO: Mine
+				break;
 			default:
 				break;
 		}
