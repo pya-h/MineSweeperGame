@@ -46,28 +46,28 @@ void MineSweeperGame::moveTo(uint8_t y, uint8_t x) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void MineSweeperGame::moveTo(CursorPosition &position) {
+void MineSweeperGame::moveTo(CursorPosition *position) {
 	// transfer the text cursor of the console to a target destination
 	// used for directional player move
 	COORD coord;
-    coord.X = position.x;
-    coord.Y = position.y;
+    coord.X = position->x;
+    coord.Y = position->y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
 void MineSweeperGame::dispositionCursor(int8_t yDirection, int8_t xDirection) {
 	// directions
-	this->cursor.disposition(yDirection, xDirection);
+	this->cursor->disposition(yDirection, xDirection);
 	// prevent cursor from jumping out of table
-	if(this->cursor.y > this->southY)
-		this->cursor.setY(this->northY);
-	else if(this->cursor.y < this->northY)
-		this->cursor.setY(this->southY);
+	if(this->cursor->y > this->southY)
+		this->cursor->setY(this->northY);
+	else if(this->cursor->y < this->northY)
+		this->cursor->setY(this->southY);
 		
-	if(this->cursor.x > this->eastX)
-		this->cursor.setX(this->westX);
-	else if(this->cursor.x < this->westX)
-		this->cursor.setX(this->eastX);
+	if(this->cursor->x > this->eastX)
+		this->cursor->setX(this->westX);
+	else if(this->cursor->x < this->westX)
+		this->cursor->setX(this->eastX);
 		
 	this->moveTo(this->cursor);
 }
@@ -77,24 +77,24 @@ void MineSweeperGame::draw() {
 	system("color 74");
 	// draw the empty table
 	// the table is designed by a specific order of | and -- prints
-	for(int i = 0; i <= VERTICAL_SCALE; i++)
+	for(int i = 0; i < VERTICAL_SCALE; i++)
 		cout << endl;
 		
 	string leftMargin = "";
 	// create a tab string for creating a space between left side of the table and the left side of console
-	for(int i = 0; i < HORIZONTAL_SCALE/2; i++, leftMargin += "\t"); 
+	for(uint8_t i = 0; i < HORIZONTAL_STEP - 3; i++, leftMargin += "\t"); 
 	
-	for(int i = 0; i <= this->rows;i++)
+	for(uint8_t i = 0; i <= this->rows;i++)
 	{
 		cout << leftMargin;
-		for(int j = 0;j < this->columns;j++)
-			cout << " --";
+		for(uint8_t j = 0;j < this->columns;j++)
+			cout << " ---";
 
 		cout << endl << leftMargin;
 		
 		if(i < this->rows) {
-			for(int j = 0;j <= this->columns;j++)
-				cout << "|  ";
+			for(uint8_t j = 0;j <= this->columns;j++)
+				cout << "|   ";
 				
 			cout << endl;
 		}
@@ -102,7 +102,7 @@ void MineSweeperGame::draw() {
 	}
 	
 	// move to first cell
-	this->cursor.update(this->northY, this->westX);
+	this->cursor->update(this->northY, this->westX);
 	this->moveTo(this->cursor);
 }
 
