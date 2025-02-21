@@ -37,7 +37,7 @@ string MineSweeperGame::getDimensions() {
 	return to_string(this->rows) + " x " + to_string(this->columns);
 }
 
-void MineSweeperGame::moveTo(short y, short x) {
+void MineSweeperGame::moveTo(uint8_t y, uint8_t x) {
 	// transfer the text cursor of the console to a target destination
 	// used for directional player move
     COORD coord;
@@ -55,7 +55,7 @@ void MineSweeperGame::moveTo(CursorPosition &position) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void MineSweeperGame::dispositionCursor(short yDirection, short xDirection) {
+void MineSweeperGame::dispositionCursor(int8_t yDirection, int8_t xDirection) {
 	// directions
 	this->cursor.disposition(yDirection, xDirection);
 	// prevent cursor from jumping out of table

@@ -1,53 +1,54 @@
 #ifndef MINESWEEPER_H
 #define MINESWEEPER_H
 #include <string>
+#include <stdint.h>
 
 #define EMPTY 0
 #define VERTICAL_SCALE 3
 #define HORIZONTAL_SCALE 4
 
-const short HORIZONTAL_STEP = (short)HORIZONTAL_SCALE/2 + 1,
-	VERTICAL_STEP = (short)VERTICAL_SCALE/2 + 1;
+const uint8_t HORIZONTAL_STEP = (uint8_t)HORIZONTAL_SCALE/2 + 1,
+	VERTICAL_STEP = (uint8_t)VERTICAL_SCALE/2 + 1;
 
 struct CursorPosition {
-	short y, x;
+	uint8_t y, x;
 	
-	CursorPosition(short _y = 0, short _x = 0) {
+	CursorPosition(uint8_t _y = 0, uint8_t _x = 0) {
 		update(_y, _x);
 	}
 	
-	void update(short _y, short _x) {
+	void update(uint8_t _y, uint8_t _x) {
 		y = _y;
 		x = _x;
 	}
 	
-	void disposition(short dy, short dx) {
+	void disposition(int8_t dy, int8_t dx) {
 		// this function will update the cursor position,
 		// considering its current position => x += dx, y += dy
 		x += dx * HORIZONTAL_STEP;
 		y += dy * VERTICAL_STEP;
 	}
 	
-	void setX(short _x) {
+	void setX(uint8_t _x) {
 		x = _x;
 	}
 	
-	void setY(short _y) {
+	void setY(uint8_t _y) {
 		y = _y;
 	}
 };
 
 struct GameState {
-	short **table; // the 2D table and all previous states of it
+	uint8_t **table; // the 2D table and all previous states of it
 	
 	GameState *next, *previous; // this creates a link list; 
 	// using this link list the player can perform Undo and Redo moves;
 	GameState(const unsigned int rows, const unsigned int columns) {
 		// initialize table;
 		next = previous = nullptr;
-		table = new short*[rows];
+		table = new uint8_t*[rows];
 		for(int i = 0; i < rows; i++) {
-			table[i] = new short[columns];
+			table[i] = new uint8_t[columns];
 			// reset table array
 			for(int j = 0; j < columns; table[i][j] = EMPTY, j++);
 
@@ -59,16 +60,16 @@ struct GameState {
 class MineSweeperGame {
 private:
 	GameState *state; // conatins the currnt table, previous state of the table and the [next state of the table(if the user has performed Undo)]
-	unsigned short int rows, columns; // the game table will be dynamically constructed by these params
-	void move(short direction); // move in a specific direction
-	void moveTo(short y = 0, short x = 0);
+	uint8_t rows, columns; // the game table will be dynamically constructed by these params
+	void move(uint8_t direction); // move in a specific direction
+	void moveTo(uint8_t y = 0, uint8_t x = 0);
 	void moveTo(CursorPosition &position);
-	short westX, eastX, northY, southY;
+	uint8_t westX, eastX, northY, southY;
 	
 	CursorPosition cursor;
 
 public:
-	MineSweeperGame(unsigned short int _rows = 16, unsigned short int _columns = 30) { 	
+	MineSweeperGame(uint8_t _rows = 16, uint8_t _columns = 30) { 	
 		// initialize and reset the game state(including the game table)
 		// cursor is set on (0, 0)
 		this->rows = _rows;
@@ -89,6 +90,6 @@ public:
 	void draw();
 	
 	void pause();
-	void dispositionCursor(short yDirection, short xDirection);
+	void dispositionCursor(uint8_tDirection, uint8_t xDirection);
 };
 #endif // MINESWEEPER_H
