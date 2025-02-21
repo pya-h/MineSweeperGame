@@ -1,14 +1,1 @@
-﻿  main.cpp
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.h(77,76): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.h(85,44): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.h(87,43): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
-  minesweeper.cpp
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.h(77,76): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.h(85,44): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.h(87,43): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(16,34): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(16,18): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(16,74): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(16,61): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
-  Generating Code...
-  MineSweeperGame.vcxproj -> D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\x64\Debug\MineSweeperGame.exe
+﻿

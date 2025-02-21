@@ -2,59 +2,10 @@
 #define MINESWEEPER_H
 #include <string>
 #include <stdint.h>
+#include "entities.h"
 
 #define EMPTY 0
 
-struct CursorPosition {
-	uint8_t y, x;
-	uint8_t horizontalStep, verticalStep;
-
-	CursorPosition(uint8_t _y = 0, uint8_t _x = 0, uint8_t horizontalStep = 1, uint8_t verticalStep = 1) {
-		update(_y, _x);
-		this->horizontalStep = horizontalStep;
-		this->verticalStep = verticalStep;
-
-	}
-	
-	void update(uint8_t _y, uint8_t _x) {
-		y = _y;
-		x = _x;
-	}
-	
-	void disposition(int8_t dy, int8_t dx) {
-		// this function will update the cursor position,
-		// considering its current position => x += dx, y += dy
-		x += dx * horizontalStep;
-		y += dy * verticalStep;
-	}
-	
-	void setX(uint8_t _x) {
-		x = _x;
-	}
-	
-	void setY(uint8_t _y) {
-		y = _y;
-	}
-};
-
-struct GameState {
-	uint8_t **table; // the 2D table and all previous states of it
-	
-	GameState *next, *previous; // this creates a link list; 
-	// using this link list the player can perform Undo and Redo moves;
-	GameState(const uint8_t rows, const uint8_t columns) {
-		// initialize table;
-		next = previous = nullptr;
-		table = new uint8_t*[rows];
-		for(int i = 0; i < rows; i++) {
-			table[i] = new uint8_t[columns];
-			// reset table array
-			for(int j = 0; j < columns; table[i][j] = EMPTY, j++);
-
-		}
-		
-	}
-};
 
 class MineSweeperGame {
 private:
@@ -66,9 +17,11 @@ private:
 	const uint8_t HORIZONTAL_STEP;
 	const uint8_t VERTICAL_STEP;
 
-	void move(uint8_t direction); // move in a specific direction
+	void move(uint8_t direction); // TODO: move in a specific direction
 	void moveTo(uint8_t y = 0, uint8_t x = 0);
 	void moveTo(CursorPosition *position);
+	void moveTo(uint8_t y, uint8_t x, uint8_t row, uint8_t column);
+
 	uint8_t westX, eastX, northY, southY;
 	
 	CursorPosition *cursor;

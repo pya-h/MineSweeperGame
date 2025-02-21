@@ -15,11 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="extra.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="entities.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="minesweeper.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
