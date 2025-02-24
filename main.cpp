@@ -16,11 +16,12 @@ int main() {
 	game.draw();
 	//game.pause();
 	bool isGameOver = false;
-	// game starts here:
-
 	// TODO: Checkout memory alloc/deallocations
 	while(!isGameOver) {
 		const char movement = _getch();
+		if (!game.isMessageBoxEmpty()) {
+			game.clearMessageBox();
+		}
 		switch(movement) {
 			case 'd':
 				// move right
@@ -40,6 +41,9 @@ int main() {
 			case 's':
 				// move down
 				game.dispositionCursor(+1, 0);
+				break;
+			case '\r':
+				// TODO: Mine
 				break;
 			default:
 				break;
