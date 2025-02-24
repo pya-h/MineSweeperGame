@@ -6,17 +6,41 @@
 
 using namespace std;
 
-void MineSweeperGame::pause() {
+MineSweeperGame::MineSweeperGame(uint8_t _rows, uint8_t _columns) : VERTICAL_SCALE(_rows / (2.0 + _rows / 5)), HORIZONTAL_SCALE(_columns / (2.0f + _columns / 10)),
+HORIZONTAL_STEP((uint8_t)HORIZONTAL_SCALE / 2 + 1), VERTICAL_STEP((uint8_t)VERTICAL_SCALE / 2 + 1) {
+	// initialize and reset the game state(including the game table)
+	// cursor is set on (0, 0)
+	this->rows = _rows;
+	this->columns = _columns;
+	this->state = new GameState(this->rows, this->columns);
+	uint8_t offsetX = this->columns / 10, offsetY = this->rows / 5;
+	this->westX = HORIZONTAL_SCALE * offsetX - (uint8_t)HORIZONTAL_SCALE / offsetX;
+	this->eastX = this->westX + (this->columns - 1) * HORIZONTAL_STEP;
+	this->northY = VERTICAL_SCALE * offsetY - (uint8_t)VERTICAL_SCALE / offsetY;
+	this->southY = this->northY + (this->rows - 1) * VERTICAL_STEP;
+
+	this->cursor = this->newCursor();
+}
+
+void MineSweeperGame::pause() const {
 	std::cout << std::endl;
 	system("pause");	
 }
 
-void MineSweeperGame::resizeConsole() {
+uint8_t MineSweeperGame::getWindowWidth() const {
+	return this->columns * HORIZONTAL_SCALE;
+}
+
+uint8_t MineSweeperGame::getWindowHeight() const {
+	return this->rows * VERTICAL_SCALE;
+}
+
+void MineSweeperGame::resizeConsole() const{
 	// FIXME: Seems not working on windows 11
 
 	// use windows.h library to resize the console into the desired width and heights
 	COORD coord;
-	const int width = this->columns * HORIZONTAL_SCALE, height = this->rows * VERTICAL_SCALE;
+	const uint8_t width = this->getWindowWidth(), height = this->getWindowHeight();
     // set the position and the coordinates of the console on the windows
 	coord.X = width;
     coord.Y = height;
@@ -35,7 +59,7 @@ MineSweeperGame::~MineSweeperGame() {
 	//cout << "Game Over";
 }
 
-string MineSweeperGame::getDimensions() {
+string MineSweeperGame::getDimensions() const {
 	// just used to inform about the dimensions used in the object.
 	return to_string(this->rows) + " x " + to_string(this->columns);
 }
@@ -112,3 +136,41 @@ void MineSweeperGame::draw() {
 	this->moveTo(this->cursor);
 }
 
+void MineSweeperGame::openBlock(const uint8_t row, const uint8_t column) {
+	try {
+		state->openBlock(row, column);
+	}
+	catch (std::invalid_argument) {
+		cout << (char)7;
+	}
+	catch (std::logic_error) {
+		// TODO: You Lose
+	}
+}
+
+void MineSweeperGame::showMessage(const string message, const string messageTag)
+{
+	gotoxy(MESSAGE_ROW_INDEX, 1);
+	this->recentMessage = message;
+	cout << "\t" << messageTag << ": " << this->recentMessage;
+	this->dispositionCursor(0, 0);
+}
+
+void MineSweeperGame::clearMessageBox()
+{
+	gotoxy(MESSAGE_ROW_INDEX, 1);
+	const uint8_t width = this->getWindowWidth();
+	for (int i = 0; i < width; i++) {
+		cout << " ";
+	}
+	this->dispositionCursor(0, 0);
+	this->recentMessage = "";
+}
+
+bool MineSweeperGame::isMessageBoxEmpty() const {
+	return this->recentMessage.empty();
+}
+
+void MineSweeperGame::move(int8_t direction) {
+	// TODO: 
+}

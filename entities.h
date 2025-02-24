@@ -123,9 +123,6 @@ struct MineBlock {
 			throw std::invalid_argument("Block has already been mined!");
 		}
 		this->isMined = true;
-		if (this->isBombed) {
-			throw std::logic_error("You Lose!");
-		}
 		return this->isBombed;
 	}
 
@@ -166,5 +163,12 @@ struct GameState {
 		}
 
 	};
+
+	bool openBlock(uint8_t row, uint8_t column) {
+		if (row >= this->table.size() || column >= this->table[row].size()) {
+			throw std::invalid_argument("Invalid Block!");
+		}
+		return this->table[row][column].mine(USER_BOMB_CHANCE, MAX_BLOCK_VALUE);
+	}
 };
 #endif
