@@ -8,7 +8,8 @@ using namespace std;
 
 
 int main() {
-	MineSweeperGame game(11, 26);
+	Player player;
+	MineSweeperGame game(player, 11, 26);
 	// resize the console so it can contain the table of the sepcified dimensions
 	game.resizeConsole();
 	//cout << table.getDimensions();
@@ -22,6 +23,10 @@ int main() {
 		if (!game.isMessageBoxEmpty()) {
 			game.clearMessageBox();
 		}
+		if (!player.startedAt) {
+			player.start();
+		}
+		system("color 70");
 		switch(movement) {
 			case 'd':
 				// move right
@@ -43,7 +48,7 @@ int main() {
 				game.dispositionCursor(+1, 0);
 				break;
 			case '\r':
-				// TODO: Mine
+				game.openCurrentBlock();
 				break;
 			default:
 				break;

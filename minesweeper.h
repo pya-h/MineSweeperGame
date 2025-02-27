@@ -9,7 +9,7 @@
 
 class MineSweeperGame {
 private:
-	const uint8_t MESSAGE_ROW_INDEX = 2;
+	const uint8_t GAME_BAR_ROW_INDEX = 1;
 	std::string recentMessage = "";
 
 	const float VERTICAL_SCALE;
@@ -20,11 +20,11 @@ private:
 	GameState* state; // conatins the currnt table, previous state of the table and the [next state of the table(if the user has performed Undo)]
 	uint8_t rows, columns; // the game table will be dynamically constructed by these params
 	uint8_t westX, eastX, northY, southY;
-	
+	Player* player;
 	CursorPosition *cursor;
 
 public:
-	MineSweeperGame(uint8_t _rows = 16, uint8_t _columns = 30);
+	MineSweeperGame(Player& player, uint8_t _rows = 16, uint8_t _columns = 30);
 
 	~MineSweeperGame(); // class destructor; used for gameOver function for example.
 
@@ -50,10 +50,11 @@ public:
 	void pause() const;
 	void dispositionCursor(int8_t yDirection, int8_t xDirection);
 
-	void openBlock(const uint8_t row, const uint8_t column);
-
+	void openCurrentBlock();
 	void clearMessageBox();
 	bool isMessageBoxEmpty() const;
 	void showMessage(const std::string message, const std::string messageTag = "ERROR");
+	void showBlockValue(const MineBlock* block);
+	void showPlayerPoint();
 };
 #endif // MINESWEEPER_H
