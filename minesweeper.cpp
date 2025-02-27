@@ -6,8 +6,10 @@
 
 using namespace std;
 
-MineSweeperGame::MineSweeperGame(uint8_t _rows, uint8_t _columns) : VERTICAL_SCALE(_rows / (2.0 + _rows / 5)), HORIZONTAL_SCALE(_columns / (2.0f + _columns / 10)),
-HORIZONTAL_STEP((uint8_t)HORIZONTAL_SCALE / 2 + 1), VERTICAL_STEP((uint8_t)VERTICAL_SCALE / 2 + 1) {
+MineSweeperGame::MineSweeperGame(Player& player, uint8_t _rows, uint8_t _columns) : player(&player),
+		VERTICAL_SCALE(_rows / (2.0 + _rows / 5)), HORIZONTAL_SCALE(_columns / (2.0f + _columns / 10)),
+		HORIZONTAL_STEP((uint8_t)HORIZONTAL_SCALE / 2 + 1), VERTICAL_STEP((uint8_t)VERTICAL_SCALE / 2 + 1) 
+{
 	// initialize and reset the game state(including the game table)
 	// cursor is set on (0, 0)
 	this->rows = _rows;
@@ -89,14 +91,14 @@ void MineSweeperGame::dispositionCursor(int8_t yDirection, int8_t xDirection) {
 	// directions
 	this->cursor->disposition(yDirection, xDirection);
 	// prevent cursor from jumping out of table
-	if(this->cursor->y > this->southY)
+	if(this->cursor->row >= this->rows)
 		this->cursor->setV(this->northY, 0);
-	else if(this->cursor->y < this->northY)
+	else if(this->cursor->row < 0)
 		this->cursor->setV(this->southY, this->rows - 1);
 		
-	if(this->cursor->x > this->eastX)
+	if(this->cursor->column >= this->columns)
 		this->cursor->setH(this->westX, 0);
-	else if(this->cursor->x < this->westX)
+	else if(this->cursor->column < 0)
 		this->cursor->setH(this->eastX, this->columns - 1);
 		
 	this->moveTo(this->cursor);
@@ -104,7 +106,7 @@ void MineSweeperGame::dispositionCursor(int8_t yDirection, int8_t xDirection) {
 
 void MineSweeperGame::draw() {
 	// set console background to white(=7) and text color to brown(=4)
-	system("color 74");
+	system("color 70");
 	// draw the empty table
 	// the table is designed by a specific order of | and -- prints
 	for(int i = 0; i < VERTICAL_SCALE; i++)
@@ -136,21 +138,49 @@ void MineSweeperGame::draw() {
 	this->moveTo(this->cursor);
 }
 
-void MineSweeperGame::openBlock(const uint8_t row, const uint8_t column) {
+
+void MineSweeperGame::showBlockValue(const MineBlock* block) {
+	this->dispositionCursor(0, 0); // make sure that terminal cursor is where it should be;
+	system(block->isBombed ? "color 74" : "color 72");
+	if (!block->isMined) {
+		cout << "?";
+	}
+	else {
+		cout << (!block->isBombed ? std::to_string(block->value) : "X");
+	}
+	this->dispositionCursor(0, 0); // return back to previous position (printing a letter pushes the cursor forward)
+}
+
+void MineSweeperGame::showPlayerPoint() {
+	gotoxy(this->eastX - 5 - this->player->points / 100, GAME_BAR_ROW_INDEX);
+	cout << "PPT: " << this->player->points;
+	this->dispositionCursor(0, 0);
+}
+
+void MineSweeperGame::openCurrentBlock() {
 	try {
-		state->openBlock(row, column);
+		const auto block = state->openBlock(this->cursor->row, this->cursor->column);
+		this->showBlockValue(block);
+		if (!block->isBombed) {
+			this->player->consumeBlock(block);
+			this->showPlayerPoint();
+		}
+		else {
+			// TODO: You lose
+		}
 	}
-	catch (std::invalid_argument) {
+	catch (std::invalid_argument& ex) {
 		cout << (char)7;
-	}
-	catch (std::logic_error) {
-		// TODO: You Lose
+		this->showMessage(ex.what());
 	}
 }
 
 void MineSweeperGame::showMessage(const string message, const string messageTag)
 {
-	gotoxy(MESSAGE_ROW_INDEX, 1);
+	if (messageTag == "ERROR") {
+		system("color 74");
+	}
+	gotoxy(1, GAME_BAR_ROW_INDEX);
 	this->recentMessage = message;
 	cout << "\t" << messageTag << ": " << this->recentMessage;
 	this->dispositionCursor(0, 0);
@@ -158,12 +188,11 @@ void MineSweeperGame::showMessage(const string message, const string messageTag)
 
 void MineSweeperGame::clearMessageBox()
 {
-	gotoxy(MESSAGE_ROW_INDEX, 1);
-	const uint8_t width = this->getWindowWidth();
-	for (int i = 0; i < width; i++) {
+	gotoxy(1, GAME_BAR_ROW_INDEX);
+	for (int i = 0; i < this->eastX; i++) {
 		cout << " ";
 	}
-	this->dispositionCursor(0, 0);
+	this->showPlayerPoint();
 	this->recentMessage = "";
 }
 

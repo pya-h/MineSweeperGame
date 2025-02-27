@@ -6,9 +6,11 @@
 #include <vector>
 #include <random>
 #include <iostream>
+#include <ctime>
 
 struct CursorPosition {
-	uint8_t y, x, row, column;
+	uint8_t y, x;
+	int8_t row, column;
 	uint8_t horizontalStep, verticalStep;
 
 	CursorPosition(uint8_t _y = 0, uint8_t _x = 0, uint8_t horizontalStep = 1, uint8_t verticalStep = 1) {
@@ -59,22 +61,22 @@ struct CursorPosition {
 		row = (y - offset) / this->verticalStep;
 	}
 
-	void setRow(uint8_t _row) {
+	void setRow(int8_t _row) {
 		this->row = _row;
 	}
 
-	void setColumn(uint8_t _col) {
+	void setColumn(int8_t _col) {
 		this->column = _col;
 	}
 
-	void setH(uint8_t _x, uint8_t _column) {
+	void setH(uint8_t _x, int8_t _column) {
 		this->x = _x;
 		this->column = _column;
 	}
 
-	void setV(uint8_t _y, uint8_t _row) {
+	void setV(uint8_t _y, int8_t _row) {
 		this->y = _y;
-		this->column = _row;
+		this->row = _row;
 	}
 
 	void teleport(CursorPosition* destination) {
@@ -107,7 +109,6 @@ struct MineBlock {
 	bool isBombed;
 	bool isIdentified;
 
-
 	MineBlock(uint8_t _row, uint8_t _column, uint8_t _value = 1, bool _isBombed = false) {
 		this->row = _row;
 		this->column = _column;
@@ -116,14 +117,13 @@ struct MineBlock {
 		this->isMined = this->isIdentified = false;
 	}
 
-	bool mine(uint8_t bombChance = 10, uint8_t maxBlockValue = 10) {
+	void mine(uint8_t bombChance = 20, uint8_t maxBlockValue = 10) {
 		this->identify(bombChance, maxBlockValue);
 
 		if (this->isMined) {
 			throw std::invalid_argument("Block has already been mined!");
 		}
 		this->isMined = true;
-		return this->isBombed;
 	}
 
 	void identify(uint8_t bombChance = 10, uint8_t maxBlockValue = 10) {
@@ -141,7 +141,7 @@ struct MineBlock {
 			this->value = 0;
 			return;
 		}
-		this->value = chance % maxBlockValue;
+		this->value = chance % maxBlockValue + 1;
 	}
 };
 
@@ -164,11 +164,43 @@ struct GameState {
 
 	};
 
-	bool openBlock(uint8_t row, uint8_t column) {
+	MineBlock *openBlock(uint8_t row, uint8_t column) {
+		const auto& block = this->getBlock(row, column);
+		block->mine(USER_BOMB_CHANCE, MAX_BLOCK_VALUE);
+		return block;
+	}
+
+	MineBlock* getBlock(const uint8_t row, const uint8_t column) {
 		if (row >= this->table.size() || column >= this->table[row].size()) {
-			throw std::invalid_argument("Invalid Block!");
+			throw std::invalid_argument("No such block!");
 		}
-		return this->table[row][column].mine(USER_BOMB_CHANCE, MAX_BLOCK_VALUE);
+		return &(this->table[row][column]);
+	}
+};
+
+struct Player {
+	std::time_t id, startedAt;
+	uint16_t points;
+
+	Player() {
+		this->startedAt = 0;
+		this->points = 0;
+		this->id = std::time(nullptr);
+	}
+
+	void start() {
+		this->startedAt = std::time(nullptr);
+	}
+
+	time_t getElapsedTime() const {
+		return std::time(nullptr) - this->startedAt;
+	}
+
+	void consumeBlock(const MineBlock* block) {
+		if (!block->isMined) {
+			throw std::invalid_argument("Block not mined!");
+		}
+		this->points += block->value;
 	}
 };
 #endif
