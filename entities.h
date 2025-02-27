@@ -117,12 +117,14 @@ struct MineBlock {
 		this->isMined = this->isIdentified = false;
 	}
 
-	void mine(uint8_t bombChance = 20, uint8_t maxBlockValue = 10) {
+	void mine(uint8_t bombChance = 20, uint8_t maxBlockValue = 10, bool onlyIfSafe = false) {
 		this->identify(bombChance, maxBlockValue);
 
 		if (this->isMined) {
 			throw std::invalid_argument("Block has already been mined!");
 		}
+		if (onlyIfSafe && this->isBombed)
+			return;
 		this->isMined = true;
 	}
 
@@ -147,7 +149,7 @@ struct MineBlock {
 
 struct GameState {
 	std::vector<std::vector<MineBlock>> table; // the 2D table and all previous states of it
-	const uint8_t USER_BOMB_CHANCE = 10, MAX_BLOCK_VALUE = 8;
+	const uint8_t USER_BOMB_CHANCE = 20, MAX_BLOCK_VALUE = 10;
 	// using this link list the player can perform Undo and Redo moves;
 	GameState(const uint8_t rows, const uint8_t columns) {
 		// initialize table;
@@ -164,10 +166,18 @@ struct GameState {
 
 	};
 
+	~GameState() {
+		this->table.clear();
+	}
+
 	MineBlock *openBlock(uint8_t row, uint8_t column) {
 		const auto& block = this->getBlock(row, column);
 		block->mine(USER_BOMB_CHANCE, MAX_BLOCK_VALUE);
 		return block;
+	}
+
+	void openBlockIfSafe(MineBlock *block) {
+		block->mine(USER_BOMB_CHANCE, MAX_BLOCK_VALUE, true);
 	}
 
 	MineBlock* getBlock(const uint8_t row, const uint8_t column) {

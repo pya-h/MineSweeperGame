@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <conio.h>
-// now include the header designed for the game
 #include "minesweeper.h"
 
 using namespace std;
@@ -26,23 +25,20 @@ int main() {
 		if (!player.startedAt) {
 			player.start();
 		}
-		system("color 70");
+		game.defaultColoring();
 		switch(movement) {
 			case 'd':
 				// move right
 				game.dispositionCursor(0, +1);
 				break;
-				
 			case 'a':
 				// move left
 				game.dispositionCursor(0, -1);
-				break;
-				
+				break;		
 			case 'w':
 				// move up
 				game.dispositionCursor(-1, 0);
 				break;
-				
 			case 's':
 				// move down
 				game.dispositionCursor(+1, 0);
