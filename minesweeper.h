@@ -4,9 +4,6 @@
 #include <stdint.h>
 #include "entities.h"
 
-#define EMPTY 0
-
-
 class MineSweeperGame {
 private:
 	const uint8_t GAME_BAR_ROW_INDEX = 1;
@@ -28,8 +25,6 @@ public:
 
 	~MineSweeperGame(); // class destructor; used for gameOver function for example.
 
-
-	void move(int8_t direction); // TODO: move in a specific direction
 	void moveTo(uint8_t y = 0, uint8_t x = 0);
 	void moveTo(CursorPosition* position);
 	void moveTo(uint8_t y, uint8_t x, uint8_t row, uint8_t column);
@@ -49,12 +44,13 @@ public:
 	
 	void pause() const;
 	void dispositionCursor(int8_t yDirection, int8_t xDirection);
-
+	uint8_t countDigits(uint64_t x) const;
 	void openCurrentBlock();
 	void clearMessageBox();
 	bool isMessageBoxEmpty() const;
 	void showMessage(const std::string message, const std::string messageTag = "ERROR");
 	void showBlockValue(const MineBlock* block);
 	void showPlayerPoint();
+	void defaultColoring();
 };
 #endif // MINESWEEPER_H

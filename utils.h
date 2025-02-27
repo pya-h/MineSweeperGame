@@ -3,7 +3,7 @@
 	I DONT USE IT FOR NOW THOUGH.
 	NOTE: THIS CODE MAY NOT BE COMPILED OK FOR NOW, BECAUSE I JUST GATHER THE TOOLS I NEED RANDOMLY
 	I WILL MODIFY THIS HEADER LATER. FOR NOW IM DESIGNING THE GAME ONLY FOR WIMNDOWS! */
-	
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -		
 // FIRST TOOL: getch()
 #include <iostream>
@@ -108,3 +108,13 @@ void gotoxy(int x, int y) {
 }
 
 #endif
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -		
+// COMMON:
+#include <stdlib.h>
+#define BEEP_SOUND() std::cout << (char)7
+#define COLOR_BG_GRAY_PEN_RED() system("color 74")
+#define COLOR_BG_GRAY_PEN_GREEN() system("color 72")
+#define COLOR_BG_GRAY_PEN_BLACK() system("color 70")
+#define PAUSE_GAME() system("pause")

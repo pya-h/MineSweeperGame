@@ -1,13 +1,13 @@
 ﻿  main.cpp
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\entities.h(136,18): warning C4244: 'initializing': conversion from 'short' to 'uint8_t', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\entities.h(161,411): warning C4551: function call missing argument list
+D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\entities.h(138,18): warning C4244: 'initializing': conversion from 'short' to 'uint8_t', possible loss of data
+D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\entities.h(163,411): warning C4551: function call missing argument list
   minesweeper.cpp
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\entities.h(136,18): warning C4244: 'initializing': conversion from 'short' to 'uint8_t', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\entities.h(161,411): warning C4551: function call missing argument list
+D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\entities.h(138,18): warning C4244: 'initializing': conversion from 'short' to 'uint8_t', possible loss of data
+D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\entities.h(163,411): warning C4551: function call missing argument list
 D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(10,17): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
 D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(19,43): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
 D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(21,42): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(33,23): warning C4244: 'return': conversion from 'float' to 'uint8_t', possible loss of data
-D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(37,20): warning C4244: 'return': conversion from 'float' to 'uint8_t', possible loss of data
+D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(38,23): warning C4244: 'return': conversion from 'float' to 'uint8_t', possible loss of data
+D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\minesweeper.cpp(42,20): warning C4244: 'return': conversion from 'float' to 'uint8_t', possible loss of data
   Generating Code...
   MineSweeperGame.vcxproj -> D:\Portfolio\thcpp\C++\VisualC++\MineSweeperGame\x64\Debug\MineSweeperGame.exe
