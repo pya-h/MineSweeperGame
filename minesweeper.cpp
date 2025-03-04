@@ -6,7 +6,7 @@
 
 using namespace std;
 
-MineSweeperGame::MineSweeperGame(Player& player, uint8_t _rows, uint8_t _columns) : player(&player),
+MineSweeperGame::MineSweeperGame(Player *player, uint8_t _rows, uint8_t _columns) : player(player),
 		VERTICAL_SCALE(_rows / (2.0 + _rows / 5)), HORIZONTAL_SCALE(_columns / (2.0f + _columns / 10)),
 		HORIZONTAL_STEP((uint8_t)HORIZONTAL_SCALE / 2 + 1), VERTICAL_STEP((uint8_t)VERTICAL_SCALE / 2 + 1) 
 {
@@ -29,6 +29,7 @@ MineSweeperGame::~MineSweeperGame() {
 	delete this->state;
 	delete this->cursor;
 }
+
 void MineSweeperGame::pause() const {
 	std::cout << std::endl;
 	PAUSE_GAME();	
@@ -137,6 +138,9 @@ void MineSweeperGame::draw() {
 	this->moveTo(this->cursor);
 }
 
+Player MineSweeperGame::getPlayer() const {
+	return *this->player;
+}
 
 void MineSweeperGame::showBlockValue(const MineBlock* block) {
 	this->dispositionCursor(0, 0);
@@ -162,7 +166,7 @@ void MineSweeperGame::showPlayerPoint() {
 	this->dispositionCursor(0, 0);
 }
 
-void MineSweeperGame::openCurrentBlock() {
+bool MineSweeperGame::openCurrentBlock() {
 	try {
 		const auto block = state->openBlock(this->cursor->row, this->cursor->column);
 		this->showBlockValue(block);
@@ -192,7 +196,7 @@ void MineSweeperGame::openCurrentBlock() {
 		}
 		else {
 			BEEP_SOUND();
-			// TODO: You lose
+			return true;
 		}
 	}
 	catch (std::invalid_argument& ex) {
@@ -200,9 +204,10 @@ void MineSweeperGame::openCurrentBlock() {
 		this->showMessage(ex.what());
 	}
 	this->dispositionCursor(0, 0); // return back to previous position (printing a letter pushes the cursor forward)
+	return false;
 }
 
-void MineSweeperGame::showMessage(const string message, const string messageTag)
+void MineSweeperGame::showMessage(const string message, const string messageTag, const bool returnToRecentBlock)
 {
 	if (messageTag == "ERROR") {
 		COLOR_BG_GRAY_PEN_RED();
@@ -210,7 +215,8 @@ void MineSweeperGame::showMessage(const string message, const string messageTag)
 	gotoxy(1, GAME_BAR_ROW_INDEX);
 	this->recentMessage = message;
 	cout << "\t" << messageTag << ": " << this->recentMessage;
-	this->dispositionCursor(0, 0);
+	if(returnToRecentBlock)
+		this->dispositionCursor(0, 0);
 }
 
 void MineSweeperGame::clearMessageBox()

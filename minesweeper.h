@@ -21,7 +21,7 @@ private:
 	CursorPosition *cursor;
 
 public:
-	MineSweeperGame(Player& player, uint8_t _rows = 16, uint8_t _columns = 30);
+	MineSweeperGame(Player *player, uint8_t _rows = 16, uint8_t _columns = 30);
 
 	~MineSweeperGame(); // class destructor; used for gameOver function for example.
 
@@ -36,6 +36,7 @@ public:
 		return new CursorPosition(x0, y0, HORIZONTAL_STEP, VERTICAL_STEP);
 	}
 
+	Player getPlayer() const;
 	void resizeConsole() const; // update the dimensions of the console based on the rows and columns of the table
 	
 	std::string getDimensions() const; // returns a string containing the dimens of the game table (16x30 by default).
@@ -45,10 +46,10 @@ public:
 	void pause() const;
 	void dispositionCursor(int8_t yDirection, int8_t xDirection);
 	uint8_t countDigits(uint64_t x) const;
-	void openCurrentBlock();
+	bool openCurrentBlock();
 	void clearMessageBox();
 	bool isMessageBoxEmpty() const;
-	void showMessage(const std::string message, const std::string messageTag = "ERROR");
+	void showMessage(const std::string message, const std::string messageTag = "ERROR", const bool returnToRecentBlock = true);
 	void showBlockValue(const MineBlock* block);
 	void showPlayerPoint();
 	void defaultColoring();
