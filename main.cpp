@@ -9,7 +9,7 @@ using namespace std;
 int main() {
 	bool likeToPlay = true;
 	while (likeToPlay) {
-		MineSweeperGame *game = new MineSweeperGame(new Player(), 11, 26);
+		MineSweeperGame *game = new MineSweeperGame(new Player(), 10, 26);
 		// resize the console so it can contain the table of the sepcified dimensions
 		game->resizeConsole();
 		//cout << table.getDimensions();
@@ -31,21 +31,25 @@ int main() {
 			switch (movement) {
 			case 'd':
 			case 'D':
+			case 77:
 				// move right
 				game->dispositionCursor(0, +1);
 				break;
 			case 'a':
 			case 'A':
+			case 75:
 				// move left
 				game->dispositionCursor(0, -1);
 				break;
 			case 'w':
 			case 'W':
+			case 72:
 				// move up
 				game->dispositionCursor(-1, 0);
 				break;
 			case 's':
 			case 'S':
+			case 80:
 				// move down
 				game->dispositionCursor(+1, 0);
 				break;
@@ -58,10 +62,10 @@ int main() {
 		}
 
 		game->showMessage("You Lose! Wanna Restart? (Y = Yes, O.W = No)", "ERROR", false);
-		
+
 		likeToPlay = tolower(_getch()) == 'y';
-		game->clearMessageBox(); 
-		// TODO: Improve game over: 1- Create player record history 2- Better UI 
+		game->clearMessageBox();
+		// TODO: Improve game over: 1- Create player record history 2- Better UI
 		delete game;
 		system("cls"); // FIXME: Use OS-independent code for clear screen
 	}
