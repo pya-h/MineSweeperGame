@@ -8,7 +8,7 @@ using namespace std;
 
 MineSweeperGame::MineSweeperGame(Player *player, uint8_t _rows, uint8_t _columns) : player(player),
 		VERTICAL_SCALE(_rows / (2.0 + _rows / 5)), HORIZONTAL_SCALE(_columns / (2.0f + _columns / 10)),
-		HORIZONTAL_STEP((uint8_t)HORIZONTAL_SCALE / 2 + 1), VERTICAL_STEP((uint8_t)VERTICAL_SCALE / 2 + 1) 
+		HORIZONTAL_STEP((uint8_t)HORIZONTAL_SCALE / 2 + 1), VERTICAL_STEP((uint8_t)VERTICAL_SCALE / 2 + 1)
 {
 	// initialize and reset the game state(including the game table)
 	// cursor is set on (0, 0)
@@ -32,7 +32,7 @@ MineSweeperGame::~MineSweeperGame() {
 
 void MineSweeperGame::pause() const {
 	std::cout << std::endl;
-	PAUSE_GAME();	
+	PAUSE_GAME();
 }
 
 uint8_t MineSweeperGame::getWindowWidth() const {
@@ -55,8 +55,8 @@ void MineSweeperGame::resizeConsole() const{
     SMALL_RECT rect;
     rect.Left = 0;
     rect.Top = 0;
-    rect.Right = width - 1;
-    rect.Bottom = height - 1;
+	rect.Right = width < 120 ? width - 1 : 119;
+	rect.Bottom =  height ;
     SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &rect);
 }
@@ -95,12 +95,12 @@ void MineSweeperGame::dispositionCursor(int8_t yDirection, int8_t xDirection) {
 		this->cursor->setV(this->northY, 0);
 	else if(this->cursor->row < 0)
 		this->cursor->setV(this->southY, this->rows - 1);
-		
+
 	if(this->cursor->column >= this->columns)
 		this->cursor->setH(this->westX, 0);
 	else if(this->cursor->column < 0)
 		this->cursor->setH(this->eastX, this->columns - 1);
-		
+
 	this->moveTo(this->cursor);
 }
 
@@ -111,11 +111,11 @@ void MineSweeperGame::draw() {
 	// the table is designed by a specific order of | and -- prints
 	for(int i = 0; i < VERTICAL_SCALE; i++)
 		cout << endl;
-		
+
 	string leftMargin = "";
 	// create a tab string for creating a space between left side of the table and the left side of console
-	for(uint8_t i = 0; i < HORIZONTAL_STEP - 3; i++, leftMargin += "\t"); 
-	
+	for(uint8_t i = 0; i < HORIZONTAL_STEP - 3; i++, leftMargin += "\t");
+
 	for(uint8_t i = 0; i <= this->rows;i++)
 	{
 		cout << leftMargin;
@@ -123,16 +123,16 @@ void MineSweeperGame::draw() {
 			cout << " ---";
 
 		cout << endl << leftMargin;
-		
+
 		if(i < this->rows) {
 			for(uint8_t j = 0;j <= this->columns;j++)
 				cout << "|   ";
-				
+
 			cout << endl;
 		}
 
 	}
-	
+
 	// move to first cell
 	this->cursor->update(this->northY, this->westX, this->northY, this->westX);
 	this->moveTo(this->cursor);
@@ -162,7 +162,7 @@ uint8_t MineSweeperGame::countDigits(uint64_t x) const {
 void MineSweeperGame::showPlayerPoint() {
 	const uint8_t pointDigitsCount = this->countDigits(this->player->points); // for counting print x offset
 	gotoxy(this->eastX - 3 - pointDigitsCount, GAME_BAR_ROW_INDEX);
-	cout << "PPT: " << this->player->points;
+	cout << "PPT: " << this->player->points<< " ";
 	this->dispositionCursor(0, 0);
 }
 
